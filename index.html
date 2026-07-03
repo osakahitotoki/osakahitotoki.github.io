@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Osaka Hitotoki Stay｜大阪・一軒家まるごと貸切の宿（上新庄・神崎川）</title>
+<meta name="description" content="大阪の一軒家をまるごと貸切。梅田まで6分の神崎川と、下町情緒の上新庄。家族旅行・グループ旅行に。ご予約はAirbnbから。">
+<meta property="og:title" content="Osaka Hitotoki Stay｜大阪・一軒家まるごと貸切の宿">
+<meta property="og:description" content="梅田まで電車6分。大阪のリアルな暮らしに泊まる、一棟貸切の宿。">
+<meta property="og:image" content="https://a0.muscache.com/im/pictures/hosting/Hosting-1704916226377828160/original/fa34967d-2144-4477-af5b-3580018379a2.jpeg?im_w=1200">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#2b2723;--paper:#faf7f2;--warm:#b3743c;--warm-d:#93582a;--tatami:#7a8450;
+  --line:#e5ddd2;--muted:#8a8177;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans JP',sans-serif;color:var(--ink);background:var(--paper);line-height:1.8}
+h1,h2,h3,.serif{font-family:'Noto Serif JP',serif}
+img{display:block;max-width:100%}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+/* header */
+header{position:sticky;top:0;z-index:50;background:rgba(250,247,242,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.hd{display:flex;align-items:center;justify-content:space-between;height:60px}
+.brand{font-family:'Noto Serif JP',serif;font-weight:600;font-size:1.05rem;letter-spacing:.06em}
+.brand small{display:block;font-size:.6rem;color:var(--muted);letter-spacing:.28em;font-family:'Noto Sans JP',sans-serif}
+nav{display:flex;gap:18px;align-items:center;font-size:.85rem}
+nav a{text-decoration:none;color:var(--muted)}
+nav a:hover{color:var(--warm-d)}
+.lang-btn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 14px;font-size:.8rem;cursor:pointer;color:var(--ink)}
+.lang-btn:hover{border-color:var(--warm)}
+
+/* hero */
+.hero{position:relative;height:78vh;min-height:480px;overflow:hidden}
+.hero img{width:100%;height:100%;object-fit:cover;filter:brightness(.72)}
+.hero-txt{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:#fff;padding:0 20px}
+.hero-txt h1{font-size:clamp(1.6rem,4.6vw,3rem);font-weight:600;letter-spacing:.12em;text-shadow:0 2px 18px rgba(0,0,0,.45)}
+.hero-txt p{margin-top:14px;font-size:clamp(.85rem,2vw,1.05rem);letter-spacing:.14em;text-shadow:0 1px 12px rgba(0,0,0,.5)}
+.hero-cta{margin-top:30px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.btn{display:inline-block;text-decoration:none;padding:13px 30px;border-radius:999px;font-weight:500;font-size:.92rem;letter-spacing:.06em;transition:.2s}
+.btn-airbnb{background:#FF385C;color:#fff;box-shadow:0 4px 18px rgba(255,56,92,.4)}
+.btn-airbnb:hover{background:#e0314f;transform:translateY(-2px)}
+.btn-ghost{border:1px solid rgba(255,255,255,.8);color:#fff}
+.btn-ghost:hover{background:rgba(255,255,255,.15)}
+
+/* sections */
+section{padding:72px 0}
+.sec-label{color:var(--warm);font-size:.75rem;letter-spacing:.34em;font-weight:700;margin-bottom:10px}
+h2{font-size:clamp(1.35rem,3vw,1.9rem);font-weight:600;letter-spacing:.08em;margin-bottom:34px}
+.lead{max-width:640px;color:#54493d;margin-bottom:8px}
+
+/* property card */
+.prop{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-bottom:56px;box-shadow:0 8px 30px rgba(60,45,25,.06)}
+.gallery{display:grid;grid-template-columns:2fr 1fr 1fr;grid-auto-rows:150px;gap:4px}
+.gallery img{width:100%;height:100%;object-fit:cover;cursor:pointer;transition:.25s}
+.gallery img:hover{filter:brightness(1.06)}
+.gallery img:first-child{grid-row:span 2}
+.prop-body{padding:30px 32px 36px}
+.prop-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;margin-bottom:6px}
+.prop-head h3{font-size:1.35rem;font-weight:600;letter-spacing:.05em}
+.badge{background:var(--tatami);color:#fff;font-size:.68rem;padding:3px 12px;border-radius:999px;letter-spacing:.1em}
+.badge.new{background:var(--warm)}
+.stars{color:#c9a227;font-size:.85rem}
+.specs{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 16px}
+.spec{border:1px solid var(--line);border-radius:999px;padding:4px 14px;font-size:.78rem;color:#5c5348;background:var(--paper)}
+.prop-desc{color:#54493d;font-size:.92rem;max-width:760px}
+.prop-cta{margin-top:24px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.prop-cta .note{font-size:.75rem;color:var(--muted)}
+
+/* features */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.feat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px 22px}
+.feat .ic{font-size:1.6rem;margin-bottom:10px}
+.feat h4{font-size:.98rem;margin-bottom:8px;letter-spacing:.04em}
+.feat p{font-size:.84rem;color:#5c5348}
+
+/* access */
+.access-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.acc{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px}
+.acc h4{margin-bottom:12px;font-size:1rem}
+.acc ul{list-style:none;font-size:.87rem}
+.acc li{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--line)}
+.acc li span:last-child{font-weight:600;color:var(--warm-d);white-space:nowrap;margin-left:12px}
+
+/* host */
+.host{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.host-inner{max-width:720px;margin:0 auto;text-align:center}
+.host-inner p{color:#54493d;font-size:.94rem;text-align:left;margin-bottom:14px}
+
+/* footer */
+footer{padding:48px 0 60px;font-size:.78rem;color:var(--muted);text-align:center}
+footer .legal{margin-top:14px;line-height:2}
+
+/* lightbox */
+#lb{position:fixed;inset:0;background:rgba(20,15,10,.9);display:none;align-items:center;justify-content:center;z-index:99;cursor:zoom-out}
+#lb img{max-width:92vw;max-height:88vh;border-radius:8px}
+
+@media(max-width:720px){
+  .gallery{grid-template-columns:1fr 1fr;grid-auto-rows:120px}
+  .gallery img:first-child{grid-column:span 2}
+  .prop-body{padding:22px 20px 28px}
+  nav a.navlink{display:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hd">
+    <div class="brand">おおさか ひととき ステイ<small>OSAKA HITOTOKI STAY</small></div>
+    <nav>
+      <a class="navlink" href="#props" data-ja="お宿一覧" data-en="Our Homes">お宿一覧</a>
+      <a class="navlink" href="#access" data-ja="アクセス" data-en="Access">アクセス</a>
+      <a class="navlink" href="#host" data-ja="ホスト" data-en="Host">ホスト</a>
+      <button class="lang-btn" id="langBtn" onclick="toggleLang()">English</button>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1704916226377828160/original/fa34967d-2144-4477-af5b-3580018379a2.jpeg?im_w=1200" alt="和室の宿">
+  <div class="hero-txt">
+    <h1 data-ja="大阪で、暮らすように泊まる。" data-en="Stay like a local, in Osaka.">大阪で、暮らすように泊まる。</h1>
+    <p data-ja="梅田まで電車6分。一軒家まるごと貸切の宿。" data-en="Six minutes to Umeda. An entire house, all to yourselves.">梅田まで電車6分。一軒家まるごと貸切の宿。</p>
+    <div class="hero-cta">
+      <a class="btn btn-airbnb" href="#props" data-ja="お宿を見る" data-en="View Our Homes">お宿を見る</a>
+    </div>
+  </div>
+</div>
+
+<section id="props">
+  <div class="wrap">
+    <div class="sec-label">OUR HOMES</div>
+    <h2 data-ja="2つの一軒家、どちらもまるごと貸切" data-en="Two houses — each one entirely yours">2つの一軒家、どちらもまるごと貸切</h2>
+
+    <!-- 神崎川 -->
+    <div class="prop">
+      <div class="gallery">
+        <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1704916226377828160/original/fa34967d-2144-4477-af5b-3580018379a2.jpeg?im_w=1200" alt="神崎川 和室">
+        <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1704916226377828160/original/a843f059-4e2b-452f-b0c5-43135cff71b7.jpeg?im_w=1200" alt="ダイニング">
+        <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1704916226377828160/original/08b7b194-8f1d-4c96-bf50-c834c646e592.jpeg?im_w=1200" alt="洋室ベッドルーム">
+        <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1704916226377828160/original/41c393c3-fdac-4849-b073-6e34a2db901a.jpeg?im_w=1200" alt="和室2">
+        <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1704916226377828160/original/99a8b617-476e-4de6-897c-eb768b2c7110.jpeg?im_w=1200" alt="玄関">
+      </div>
+      <div class="prop-body">
+        <div class="prop-head">
+          <h3 data-ja="神崎川の家｜梅田まで6分" data-en="Kanzakigawa House | 6 min to Umeda">神崎川の家｜梅田まで6分</h3>
+          <span class="badge new" data-ja="2026年7月オープン" data-en="OPEN July 2026">2026年7月オープン</span>
+        </div>
+        <div class="specs">
+          <span class="spec" data-ja="最大7名" data-en="Sleeps 7">最大7名</span>
+          <span class="spec" data-ja="3階建て・約76㎡" data-en="3 floors / 76m²">3階建て・約76㎡</span>
+          <span class="spec" data-ja="寝室3・トイレ2・バス2" data-en="3BR / 2WC / 2 Baths">寝室3・トイレ2・バス2</span>
+          <span class="spec" data-ja="阪急神崎川駅 徒歩4分" data-en="4 min walk to Kanzakigawa Stn.">阪急神崎川駅 徒歩4分</span>
+          <span class="spec" data-ja="無料自転車2台" data-en="2 free bicycles">無料自転車2台</span>
+        </div>
+        <p class="prop-desc"
+           data-ja="梅田まで電車でわずか6分、乗り換えなし。畳の和室にお布団を敷く日本らしい滞在と、洋室ベッドの快適さをどちらも。バス・トイレ・キッチンが各2ヶ所で、ご家族やグループでも朝の支度で渋滞しません。ベビーベッドなど子供用品も完備。"
+           data-en="Just 6 minutes to Umeda by train, no transfers. Enjoy both futons on tatami and comfortable Western beds. With two bathrooms, two toilets and two kitchens, even big groups never wait in line. Baby cot and kids' amenities included.">
+           梅田まで電車でわずか6分、乗り換えなし。畳の和室にお布団を敷く日本らしい滞在と、洋室ベッドの快適さをどちらも。バス・トイレ・キッチンが各2ヶ所で、ご家族やグループでも朝の支度で渋滞しません。ベビーベッドなど子供用品も完備。</p>
+        <div class="prop-cta">
+          <a class="btn btn-airbnb" href="https://www.airbnb.jp/rooms/1704916226377828160" target="_blank" rel="noopener"
+             data-ja="Airbnbで空室を見る・予約" data-en="Check availability on Airbnb">Airbnbで空室を見る・予約</a>
+          <span class="note" data-ja="ご予約・お支払いはAirbnbで安全に行えます" data-en="Booking & payment are handled securely by Airbnb">ご予約・お支払いはAirbnbで安全に行えます</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 上新庄 -->
+    <div class="prop">
+      <div class="gallery">
+        <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1573809917813575672/original/cfaa153d-fc41-45cf-84c7-6e5526d89f83.jpeg?im_w=1200" alt="上新庄 浮世絵ベッドルーム">
+        <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1573809917813575672/original/e73c9110-49b5-4a2b-a60f-4da9740820e2.jpeg?im_w=1200" alt="和室ベッドルーム">
+        <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1573809917813575672/original/1ceb5256-b4fe-4dac-878d-2bb4ac80e0e5.jpeg?im_w=1200" alt="ダイニング">
+        <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1573809917813575672/original/76377587-f44c-479e-9745-93fd445cde27.jpeg?im_w=1200" alt="ソファルーム">
+        <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1573809917813575672/original/1164a4c1-8499-43d9-bc78-7014df5cfe21.jpeg?im_w=1200" alt="バスルーム">
+      </div>
+      <div class="prop-body">
+        <div class="prop-head">
+          <h3 data-ja="上新庄の家｜梅田まで15分" data-en="Kamishinjo House | 15 min to Umeda">上新庄の家｜梅田まで15分</h3>
+          <span class="badge" data-ja="ゲストチョイス ★5.0" data-en="Guest Favorite ★5.0">ゲストチョイス ★5.0</span>
+        </div>
+        <div class="specs">
+          <span class="spec" data-ja="最大5名" data-en="Sleeps 5">最大5名</span>
+          <span class="spec" data-ja="3LDK・約67㎡" data-en="3BR / 67m²">3LDK・約67㎡</span>
+          <span class="spec" data-ja="閑静な住宅街" data-en="Quiet neighborhood">閑静な住宅街</span>
+          <span class="spec" data-ja="阪急上新庄駅 徒歩7分" data-en="7 min walk to Kamishinjo Stn.">阪急上新庄駅 徒歩7分</span>
+          <span class="spec" data-ja="レビュー★5.0" data-en="Rated ★5.0">レビュー★5.0</span>
+        </div>
+        <p class="prop-desc"
+           data-ja="ホストが生まれ育った、治安が良く飲食店の多い下町・上新庄。浮世絵の飾られた寝室で、大阪の日常に溶け込む滞在を。梅田15分・京都やUSJへの観光拠点にも。ゲストチョイス受賞・レビュー★5.0の実績ある宿です。"
+           data-en="Kamishinjo is the safe, friendly neighborhood where your host was born and raised, full of local restaurants. Sleep under ukiyo-e art and blend into everyday Osaka. 15 min to Umeda, a great base for Kyoto and USJ. A Guest Favorite rated ★5.0.">
+           ホストが生まれ育った、治安が良く飲食店の多い下町・上新庄。浮世絵の飾られた寝室で、大阪の日常に溶け込む滞在を。梅田15分・京都やUSJへの観光拠点にも。ゲストチョイス受賞・レビュー★5.0の実績ある宿です。</p>
+        <div class="prop-cta">
+          <a class="btn btn-airbnb" href="https://www.airbnb.jp/rooms/1573809917813575672" target="_blank" rel="noopener"
+             data-ja="Airbnbで空室を見る・予約" data-en="Check availability on Airbnb">Airbnbで空室を見る・予約</a>
+          <span class="note" data-ja="ご予約・お支払いはAirbnbで安全に行えます" data-en="Booking & payment are handled securely by Airbnb">ご予約・お支払いはAirbnbで安全に行えます</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-label">WHY STAY WITH US</div>
+    <h2 data-ja="選ばれる理由" data-en="Why guests choose us">選ばれる理由</h2>
+    <div class="feat-grid">
+      <div class="feat"><div class="ic">🏠</div><h4 data-ja="一棟まるごと貸切" data-en="The whole house is yours">一棟まるごと貸切</h4><p data-ja="他のゲストとの共用スペースは一切なし。ご家族・グループだけの空間です。" data-en="No shared spaces with other guests. The entire home belongs to your group.">他のゲストとの共用スペースは一切なし。ご家族・グループだけの空間です。</p></div>
+      <div class="feat"><div class="ic">🚃</div><h4 data-ja="梅田へ乗り換えなし" data-en="Direct to Umeda">梅田へ乗り換えなし</h4><p data-ja="神崎川から6分・上新庄から15分。USJ・京都・神戸・難波も気軽に。" data-en="6 min from Kanzakigawa, 15 min from Kamishinjo. Easy trips to USJ, Kyoto, Kobe & Namba.">神崎川から6分・上新庄から15分。USJ・京都・神戸・難波も気軽に。</p></div>
+      <div class="feat"><div class="ic">🛏</div><h4 data-ja="和室×お布団の体験" data-en="Tatami & futon experience">和室×お布団の体験</h4><p data-ja="畳の和室にお布団を敷いて、日本らしい夜を。洋室ベッドももちろん。" data-en="Lay out futons on tatami for a truly Japanese night — Western beds available too.">畳の和室にお布団を敷いて、日本らしい夜を。洋室ベッドももちろん。</p></div>
+      <div class="feat"><div class="ic">👶</div><h4 data-ja="お子様連れ歓迎" data-en="Family & kids friendly">お子様連れ歓迎</h4><p data-ja="ベビーベッド・ベビーチェア・子供用食器を完備。安心してご旅行を。" data-en="Baby cot, high chair and kids' tableware provided. Travel with peace of mind.">ベビーベッド・ベビーチェア・子供用食器を完備。安心してご旅行を。</p></div>
+      <div class="feat"><div class="ic">🔑</div><h4 data-ja="セルフチェックイン" data-en="Self check-in">セルフチェックイン</h4><p data-ja="キーボックスで深夜到着もOK。ご自身のペースでどうぞ。" data-en="Key box access — even late-night arrivals are no problem.">キーボックスで深夜到着もOK。ご自身のペースでどうぞ。</p></div>
+      <div class="feat"><div class="ic">📶</div><h4 data-ja="高速Wi-Fi・長期滞在◎" data-en="Fast Wi-Fi & long stays">高速Wi-Fi・長期滞在◎</h4><p data-ja="洗濯乾燥機・フルキッチン完備で、ワーケーションや連泊も快適。" data-en="Washer-dryer and full kitchens make workations and long stays comfortable.">洗濯乾燥機・フルキッチン完備で、ワーケーションや連泊も快適。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="access" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-label">ACCESS</div>
+    <h2 data-ja="アクセス" data-en="Access">アクセス</h2>
+    <div class="access-grid">
+      <div class="acc">
+        <h4 data-ja="🏠 神崎川の家（阪急神崎川駅 徒歩4分）" data-en="🏠 Kanzakigawa House (4 min from Hankyu Kanzakigawa)">🏠 神崎川の家（阪急神崎川駅 徒歩4分）</h4>
+        <ul>
+          <li><span data-ja="梅田" data-en="Umeda">梅田</span><span data-ja="6分・乗換なし" data-en="6 min, direct">6分・乗換なし</span></li>
+          <li><span data-ja="新大阪（新幹線）" data-en="Shin-Osaka (Shinkansen)">新大阪（新幹線）</span><span data-ja="約20分" data-en="approx. 20 min">約20分</span></li>
+          <li><span>USJ</span><span data-ja="約30分" data-en="approx. 30 min">約30分</span></li>
+          <li><span data-ja="京都" data-en="Kyoto">京都</span><span data-ja="約45分" data-en="approx. 45 min">約45分</span></li>
+          <li><span data-ja="伊丹空港" data-en="Itami Airport">伊丹空港</span><span data-ja="約20分" data-en="approx. 20 min">約20分</span></li>
+          <li><span data-ja="関西空港" data-en="Kansai Int'l Airport">関西空港</span><span data-ja="約60〜70分" data-en="approx. 60–70 min">約60〜70分</span></li>
+        </ul>
+      </div>
+      <div class="acc">
+        <h4 data-ja="🏠 上新庄の家（阪急上新庄駅 徒歩7分）" data-en="🏠 Kamishinjo House (7 min from Hankyu Kamishinjo)">🏠 上新庄の家（阪急上新庄駅 徒歩7分）</h4>
+        <ul>
+          <li><span data-ja="梅田" data-en="Umeda">梅田</span><span data-ja="約15分" data-en="approx. 15 min">約15分</span></li>
+          <li><span data-ja="京都（河原町）" data-en="Kyoto (Kawaramachi)">京都（河原町）</span><span data-ja="乗換1回" data-en="1 transfer">乗換1回</span></li>
+          <li><span>USJ</span><span data-ja="約40分" data-en="approx. 40 min">約40分</span></li>
+          <li><span data-ja="難波" data-en="Namba">難波</span><span data-ja="約25分" data-en="approx. 25 min">約25分</span></li>
+          <li><span data-ja="周辺" data-en="Nearby">周辺</span><span data-ja="飲食店・スーパー多数" data-en="Restaurants & markets">飲食店・スーパー多数</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="host" class="host">
+  <div class="wrap host-inner">
+    <div class="sec-label">HOST</div>
+    <h2 data-ja="この宿に込めた想い" data-en="The story behind our homes">この宿に込めた想い</h2>
+    <p data-ja="この宿をはじめたのは、泊まるすべての方に楽しい思い出をつくっていただける場所にしたかったからです。観光で大阪を旅される方も、お仕事で長く滞在される方も、学生さんも、どなたにも満足して、安心して過ごしていただくこと。それがこの宿のコンセプトです。"
+       data-en="I started hosting because I wanted this to be a place where everyone who stays can make happy memories — travelers exploring Osaka, guests on long business trips, students. My hope is that every single guest feels satisfied and at ease.">
+       この宿をはじめたのは、泊まるすべての方に楽しい思い出をつくっていただける場所にしたかったからです。観光で大阪を旅される方も、お仕事で長く滞在される方も、学生さんも、どなたにも満足して、安心して過ごしていただくこと。それがこの宿のコンセプトです。</p>
+    <p data-ja="私はこの街で生まれ育ちました。治安がよく、飲食店も多く、観光にもビジネスにも便利な大阪の下町です。地元の人間だからこそ知っているおすすめも、気軽に聞いてくださいね。あなたの大阪での時間が、心に残るものになりますように。"
+       data-en="I was born and raised right here — a safe, friendly Osaka neighborhood with plenty of restaurants, convenient for sightseeing and business alike. As a local, I'm always happy to share my personal recommendations. I hope your time in Osaka becomes a memory you'll treasure.">
+       私はこの街で生まれ育ちました。治安がよく、飲食店も多く、観光にもビジネスにも便利な大阪の下町です。地元の人間だからこそ知っているおすすめも、気軽に聞いてくださいね。あなたの大阪での時間が、心に残るものになりますように。</p>
+    <div style="margin-top:26px">
+      <a class="btn btn-airbnb" href="#props" data-ja="お宿を選んで予約する" data-en="Choose a home & book">お宿を選んで予約する</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand" style="justify-content:center">おおさか ひととき ステイ<small>OSAKA HITOTOKI STAY</small></div>
+    <div class="legal">
+      <span data-ja="ご予約・お支払い・お問い合わせはすべてAirbnbを通じて承ります。" data-en="All bookings, payments and inquiries are handled through Airbnb.">ご予約・お支払い・お問い合わせはすべてAirbnbを通じて承ります。</span><br>
+      <span data-ja="国家戦略特別区域外国人滞在施設経営事業（大阪市特区民泊）認定施設" data-en="Certified private lodging under the Osaka City Special Zone program (Tokku Minpaku).">国家戦略特別区域外国人滞在施設経営事業（大阪市特区民泊）認定施設</span><br>
+      <span data-ja="神崎川の家：大阪市指令 大保環第26−567号｜上新庄の家：大阪市指令 大保環第25−3981号" data-en="Kanzakigawa House: Osaka City Cert. No. 26-567 | Kamishinjo House: Osaka City Cert. No. 25-3981">神崎川の家：大阪市指令 大保環第26−567号｜上新庄の家：大阪市指令 大保環第25−3981号</span><br>
+      © 2026 Osaka Hitotoki Stay
+    </div>
+  </div>
+</footer>
+
+<div id="lb" onclick="this.style.display='none'"><img id="lbimg" src="" alt=""></div>
+
+<script>
+let lang='ja';
+function toggleLang(){
+  lang = lang==='ja' ? 'en' : 'ja';
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-ja]').forEach(el=>{
+    el.textContent = el.getAttribute('data-'+lang);
+  });
+  document.getElementById('langBtn').textContent = lang==='ja' ? 'English' : '日本語';
+}
+document.querySelectorAll('.gallery img').forEach(im=>{
+  im.addEventListener('click',()=>{
+    document.getElementById('lbimg').src = im.src;
+    document.getElementById('lb').style.display = 'flex';
+  });
+});
+</script>
+</body>
+</html>
