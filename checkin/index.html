@@ -57,6 +57,14 @@
         <small data-i18n="q_natpass_s"></small></label>
       <textarea id="f_natpass" required></textarea>
 
+      <label><span data-i18n="q_addr"></span> <span class="req">*</span>
+        <small data-i18n="q_addr_s"></small></label>
+      <textarea id="f_addr" required></textarea>
+
+      <label><span data-i18n="q_job"></span>
+        <small data-i18n="q_job_s"></small></label>
+      <textarea id="f_job"></textarea>
+
       <label><span data-i18n="q_contact"></span> <span class="req">*</span></label>
       <input id="f_contact" required>
 
@@ -80,69 +88,84 @@
 // ====== 送信先（Googleフォーム）======
 const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdiCJrhAlOSfemdd0mw8bHN9r4D_1rlLYigbLvroM2plAdryA/formResponse";
 const ENTRY = { code:"entry.1291716912", names:"entry.597151491",
-                natpass:"entry.1043140757", contact:"entry.969291366", period:"entry.1828523476" };
+                natpass:"entry.1043140757", contact:"entry.969291366", period:"entry.1828523476",
+                address:"entry.851956946", job:"entry.776376456" };
 
 // ====== 多言語辞書 ======
 const I18N = {
  en: { name:"EN", sub:"Guest Registration (required by Japanese law)",
-   note:"Under Japanese law (Hotel Business Act), we must record every guest's name, nationality and passport number. Your information is used only for the legally required guest registry. Passport photos: please send via Airbnb message.",
+   note:"Under Japanese law (Hotel Business Act), we must record every guest's name, home address, nationality and passport number. Your information is used only for the legally required guest registry. Passport photos: please send via Airbnb message.",
    q_code:"Booking code", q_code_s:"Filled automatically from your link.",
    q_names:"Full names of ALL guests (as in passport)", q_names_s:"One name per line.",
    q_natpass:"Nationality & passport number for each guest", q_natpass_s:"e.g. France / 12AB34567 — one guest per line.",
+   q_addr:"Home address of ALL guests", q_addr_s:"One per line. If everyone shares the same address, write it once and add \"same for all\".",
+   q_job:"Occupation of ALL guests（optional）", q_job_s:"Optional. One per line. e.g. office worker, student, self-employed, homemaker, retired.",
    q_contact:"Contact (email or phone)",
    q_period:"Period of stay in Japan", q_period_s:"e.g. 2026/7/14 - 2026/7/28",
    send:"Submit", privacy:"Your information is used only for the guest registry required by Japanese law and is never shared with third parties.",
    thanks:"Thank you!", thanks_s:"Your check-in has been registered. We look forward to welcoming you!" },
  ja: { name:"日本語", sub:"宿泊者名簿のご登録（日本の法律で義務付けられています）",
-   note:"旅館業法により、宿泊者全員の氏名・国籍・旅券番号の記録が義務付けられています。ご入力いただいた情報は宿泊者名簿のためだけに使用します。パスポート画像はAirbnbメッセージでお送りください。",
+   note:"旅館業法により、宿泊者全員の氏名・住所・国籍・旅券番号の記録が義務付けられています。ご入力いただいた情報は宿泊者名簿のためだけに使用します。パスポート画像はAirbnbメッセージでお送りください。",
    q_code:"予約コード", q_code_s:"リンクから自動で入ります。",
    q_names:"宿泊者全員の氏名（パスポート表記）", q_names_s:"1行に1名ずつ。",
-   q_natpass:"全員の国籍と旅券番号", q_natpass_s:"例：日本 / TR1234567 — 1行に1名ずつ。",
+   q_natpass:"全員の国籍と旅券番号", q_natpass_s:"例：日本 / TR1234567 — 1行に1名ずつ。日本国内にお住まいの方は「日本」だけで結構です。",
+   q_addr:"宿泊者全員のご住所", q_addr_s:"1行に1名ずつ。ご家族など全員同じご住所の場合は、1つだけご記入のうえ「全員同じ」とお書きください。",
+   q_job:"宿泊者全員のご職業（任意）", q_job_s:"任意です。1行に1名ずつ。例：会社員・学生・自営業・主婦（主夫）・無職。",
    q_contact:"連絡先（メールまたは電話）",
    q_period:"日本での滞在期間", q_period_s:"例：2026/7/14 - 2026/7/28",
    send:"送信する", privacy:"ご入力いただいた情報は、法令で定められた宿泊者名簿のためだけに使用し、第三者に提供することはありません。",
    thanks:"ありがとうございました！", thanks_s:"チェックイン登録が完了しました。お会いできるのを楽しみにしています。" },
  zh: { name:"中文", sub:"住宿登记（日本法律规定）",
-   note:"根据日本法律（旅馆业法），我们必须记录每位住客的姓名、国籍和护照号码。您的信息仅用于法律要求的住宿名簿。护照照片请通过Airbnb消息发送。",
+   note:"根据日本法律（旅馆业法），我们必须记录每位住客的姓名、住址、国籍和护照号码。您的信息仅用于法律要求的住宿名簿。护照照片请通过Airbnb消息发送。",
    q_code:"预订编号", q_code_s:"从链接自动填写。",
    q_names:"全部住客的姓名（与护照一致）", q_names_s:"每行一人。",
    q_natpass:"每位住客的国籍和护照号码", q_natpass_s:"例：China / E12345678 — 每行一人。",
+   q_addr:"全部住客的住址", q_addr_s:"每行一人。若全体住址相同，只需填写一次并注明「全员相同」。",
+   q_job:"全部住客的职业（选填）", q_job_s:"选填。每行一人。例：公司职员・学生・自营业・家庭主妇（主夫）・无职业。",
    q_contact:"联系方式（邮箱或电话）",
    q_period:"在日本的停留期间", q_period_s:"例：2026/7/14 - 2026/7/28",
    send:"提交", privacy:"您的信息仅用于日本法律要求的住宿名簿，绝不会提供给第三方。",
    thanks:"谢谢！", thanks_s:"登记完成。期待您的光临！" },
  ko: { name:"한국어", sub:"숙박자 명부 등록 (일본 법률상 의무)",
-   note:"일본 법률(여관업법)에 따라 모든 투숙객의 성명·국적·여권번호를 기록해야 합니다. 입력하신 정보는 법정 숙박자 명부에만 사용됩니다. 여권 사진은 Airbnb 메시지로 보내주세요.",
+   note:"일본 법률(여관업법)에 따라 모든 투숙객의 성명·주소·국적·여권번호를 기록해야 합니다. 입력하신 정보는 법정 숙박자 명부에만 사용됩니다. 여권 사진은 Airbnb 메시지로 보내주세요.",
    q_code:"예약 코드", q_code_s:"링크에서 자동 입력됩니다.",
    q_names:"전체 투숙객 성명 (여권 표기)", q_names_s:"한 줄에 한 명씩.",
    q_natpass:"전원의 국적과 여권번호", q_natpass_s:"예: Korea / M12345678 — 한 줄에 한 명씩.",
+   q_addr:"전체 투숙객의 주소", q_addr_s:"한 줄에 한 명씩. 모두 같은 주소인 경우 한 번만 적고 「전원 동일」이라고 써 주세요.",
+   q_job:"전체 투숙객의 직업（선택）", q_job_s:"선택 사항입니다. 한 줄에 한 명씩. 예: 회사원・학생・자영업・주부・무직.",
    q_contact:"연락처 (이메일 또는 전화)",
    q_period:"일본 체류 기간", q_period_s:"예: 2026/7/14 - 2026/7/28",
    send:"제출", privacy:"입력하신 정보는 일본 법률상 필요한 숙박자 명부에만 사용되며 제3자에게 제공되지 않습니다.",
    thanks:"감사합니다!", thanks_s:"체크인 등록이 완료되었습니다. 만나뵙기를 기대합니다!" },
  fr: { name:"FR", sub:"Registre des voyageurs (obligatoire selon la loi japonaise)",
-   note:"Selon la loi japonaise, nous devons enregistrer le nom, la nationalité et le numéro de passeport de chaque voyageur. Vos informations ne servent qu'au registre légal. Photos de passeport : envoyez-les via message Airbnb.",
+   note:"Selon la loi japonaise, nous devons enregistrer le nom, l'adresse du domicile, la nationalité et le numéro de passeport de chaque voyageur. Vos informations ne servent qu'au registre légal. Photos de passeport : envoyez-les via message Airbnb.",
    q_code:"Code de réservation", q_code_s:"Rempli automatiquement depuis votre lien.",
    q_names:"Noms complets de TOUS les voyageurs (comme sur le passeport)", q_names_s:"Un nom par ligne.",
    q_natpass:"Nationalité et numéro de passeport de chacun", q_natpass_s:"ex. France / 12AB34567 — une personne par ligne.",
+   q_addr:"Adresse du domicile de TOUS les voyageurs", q_addr_s:"Une par ligne. Si tous ont la même adresse, indiquez-la une fois et ajoutez « identique pour tous ».",
+   q_job:"Profession de TOUS les voyageurs（facultatif）", q_job_s:"Facultatif. Une par ligne. ex. employé(e), étudiant(e), indépendant(e), au foyer, retraité(e).",
    q_contact:"Contact (e-mail ou téléphone)",
    q_period:"Période de séjour au Japon", q_period_s:"ex. 2026/7/14 - 2026/7/28",
    send:"Envoyer", privacy:"Vos informations ne sont utilisées que pour le registre des voyageurs exigé par la loi japonaise et ne sont jamais partagées.",
    thanks:"Merci !", thanks_s:"Votre enregistrement est terminé. Au plaisir de vous accueillir !" },
  de: { name:"DE", sub:"Gästeregistrierung (nach japanischem Recht erforderlich)",
-   note:"Nach japanischem Recht müssen wir Name, Nationalität und Passnummer aller Gäste erfassen. Ihre Daten werden nur für das gesetzlich vorgeschriebene Gästeregister verwendet. Passfotos bitte per Airbnb-Nachricht senden.",
+   note:"Nach japanischem Recht müssen wir Name, Wohnanschrift, Nationalität und Passnummer aller Gäste erfassen. Ihre Daten werden nur für das gesetzlich vorgeschriebene Gästeregister verwendet. Passfotos bitte per Airbnb-Nachricht senden.",
    q_code:"Buchungscode", q_code_s:"Wird automatisch aus Ihrem Link übernommen.",
    q_names:"Vollständige Namen ALLER Gäste (wie im Pass)", q_names_s:"Ein Name pro Zeile.",
    q_natpass:"Nationalität und Passnummer jedes Gastes", q_natpass_s:"z. B. Germany / C01X0006H — eine Person pro Zeile.",
+   q_addr:"Wohnanschrift ALLER Gäste", q_addr_s:"Eine pro Zeile. Bei gleicher Anschrift einmal angeben und „für alle gleich“ ergänzen.",
+   q_job:"Beruf ALLER Gäste（optional）", q_job_s:"Optional. Einer pro Zeile. z. B. Angestellte(r), Student(in), selbstständig, Hausfrau/Hausmann, Rentner(in).",
    q_contact:"Kontakt (E-Mail oder Telefon)",
    q_period:"Aufenthaltszeitraum in Japan", q_period_s:"z. B. 2026/7/14 - 2026/7/28",
    send:"Absenden", privacy:"Ihre Daten werden ausschließlich für das gesetzlich vorgeschriebene Gästeregister verwendet und niemals weitergegeben.",
    thanks:"Vielen Dank!", thanks_s:"Ihre Registrierung ist abgeschlossen. Wir freuen uns auf Sie!" },
  es: { name:"ES", sub:"Registro de huéspedes (obligatorio por la ley japonesa)",
-   note:"Según la ley japonesa, debemos registrar el nombre, la nacionalidad y el número de pasaporte de cada huésped. Su información solo se usa para el registro legal. Fotos del pasaporte: envíelas por mensaje de Airbnb.",
+   note:"Según la ley japonesa, debemos registrar el nombre, el domicilio, la nacionalidad y el número de pasaporte de cada huésped. Su información solo se usa para el registro legal. Fotos del pasaporte: envíelas por mensaje de Airbnb.",
    q_code:"Código de reserva", q_code_s:"Se rellena automáticamente desde su enlace.",
    q_names:"Nombres completos de TODOS los huéspedes (como en el pasaporte)", q_names_s:"Un nombre por línea.",
    q_natpass:"Nacionalidad y número de pasaporte de cada uno", q_natpass_s:"ej. Spain / PAB123456 — una persona por línea.",
+   q_addr:"Domicilio de TODOS los huéspedes", q_addr_s:"Uno por línea. Si todos comparten la misma dirección, escríbala una vez y añada «igual para todos».",
+   q_job:"Ocupación de TODOS los huéspedes（opcional）", q_job_s:"Opcional. Una por línea. ej. empleado/a, estudiante, autónomo/a, ama/o de casa, jubilado/a.",
    q_contact:"Contacto (correo o teléfono)",
    q_period:"Período de estancia en Japón", q_period_s:"ej. 2026/7/14 - 2026/7/28",
    send:"Enviar", privacy:"Su información se utiliza únicamente para el registro de huéspedes exigido por la ley japonesa y nunca se comparte.",
@@ -183,6 +206,8 @@ document.getElementById("ci").addEventListener("submit", async (e) => {
   fd.append(ENTRY.code, code || "(no code)");
   fd.append(ENTRY.names, document.getElementById("f_names").value);
   fd.append(ENTRY.natpass, document.getElementById("f_natpass").value);
+  fd.append(ENTRY.address, document.getElementById("f_addr").value);
+  fd.append(ENTRY.job, document.getElementById("f_job").value);
   fd.append(ENTRY.contact, document.getElementById("f_contact").value);
   fd.append(ENTRY.period, document.getElementById("f_period").value);
   try { await fetch(FORM_URL, { method:"POST", mode:"no-cors", body:fd }); } catch(_) {}
