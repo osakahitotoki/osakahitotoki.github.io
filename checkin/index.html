@@ -115,7 +115,7 @@ const I18N = {
    q_period:"日本での滞在期間", q_period_s:"例：2026/7/14 - 2026/7/28",
    send:"送信する", privacy:"ご入力いただいた情報は、法令で定められた宿泊者名簿のためだけに使用し、第三者に提供することはありません。",
    thanks:"ありがとうございました！", thanks_s:"チェックイン登録が完了しました。お会いできるのを楽しみにしています。" },
- zh: { name:"中文", sub:"住宿登记（日本法律规定）",
+ zh: { name:"简体中文", htmlLang:"zh-Hans", sub:"住宿登记（日本法律规定）",
    note:"根据日本法律（旅馆业法），我们必须记录每位住客的姓名、住址、国籍和护照号码。您的信息仅用于法律要求的住宿名簿。护照照片请通过Airbnb消息发送。",
    q_code:"预订编号", q_code_s:"从链接自动填写。",
    q_names:"全部住客的姓名（与护照一致）", q_names_s:"每行一人。",
@@ -126,6 +126,17 @@ const I18N = {
    q_period:"在日本的停留期间", q_period_s:"例：2026/7/14 - 2026/7/28",
    send:"提交", privacy:"您的信息仅用于日本法律要求的住宿名簿，绝不会提供给第三方。",
    thanks:"谢谢！", thanks_s:"登记完成。期待您的光临！" },
+ zhTW: { name:"繁體中文", htmlLang:"zh-Hant", sub:"住宿登記（依日本法律規定）",
+   note:"依據日本法律（旅館業法），我們必須記錄每位住客的姓名、住址、國籍及護照號碼。您所填寫的資訊僅用於法律規定的住宿名簿。護照照片請透過Airbnb訊息傳送。",
+   q_code:"訂房編號", q_code_s:"已由連結自動帶入。",
+   q_names:"全部住客的姓名（與護照相同）", q_names_s:"每行一位。",
+   q_natpass:"每位住客的國籍與護照號碼", q_natpass_s:"例：Taiwan / 350343599 — 每行一位。",
+   q_addr:"全部住客的住址", q_addr_s:"請先填寫代表人的住址。若同行者住址相同，請加註「全部相同」。若有人住址不同，請在住址旁寫上其姓名。例）Bailey / 1238 McCarroll St, Clarkston WA 99403",
+   q_job:"全部住客的職業（選填）", q_job_s:"選填。每行一位。例：上班族・學生・自營業・家庭主婦（主夫）・無業。",
+   q_contact:"聯絡方式（電子郵件或電話）",
+   q_period:"在日本的停留期間", q_period_s:"例：2026/7/14 - 2026/7/28",
+   send:"送出", privacy:"您所填寫的資訊僅用於日本法律規定的住宿名簿，絕不會提供給第三方。",
+   thanks:"感謝您！", thanks_s:"登記已完成。期待與您見面！" },
  ko: { name:"한국어", sub:"숙박자 명부 등록 (일본 법률상 의무)",
    note:"일본 법률(여관업법)에 따라 모든 투숙객의 성명·주소·국적·여권번호를 기록해야 합니다. 입력하신 정보는 법정 숙박자 명부에만 사용됩니다. 여권 사진은 Airbnb 메시지로 보내주세요.",
    q_code:"예약 코드", q_code_s:"링크에서 자동 입력됩니다.",
@@ -173,7 +184,7 @@ const I18N = {
 };
 
 // ====== 言語切り替え ======
-const order = ["en","zh","ja","ko","fr","de","es"];
+const order = ["en","zh","zhTW","ja","ko","fr","de","es"];
 const langsDiv = document.getElementById("langs");
 order.forEach(k => {
   const b = document.createElement("button");
@@ -186,12 +197,27 @@ function setLang(k) {
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const t = I18N[k][el.dataset.i18n]; if (t) el.textContent = t;
   });
-  document.documentElement.lang = k;
-  localStorage.setItem("ci_lang", k);
+  document.documentElement.lang = I18N[k].htmlLang || k;
+  saveLang(k);
 }
+// プライベートモード等でlocalStorageが使えないと例外で止まり、ページが真っ白になるため必ず包む
+function savedLang() { try { return localStorage.getItem("ci_lang"); } catch(_) { return null; } }
+function saveLang(k) { try { localStorage.setItem("ci_lang", k); } catch(_) {} }
 // ブラウザ言語で初期表示
-const nav = (navigator.language || "en").slice(0,2);
-setLang(localStorage.getItem("ci_lang") || (I18N[nav] ? nav : "en"));
+// 中国語だけは字体で分ける：zh-TW / zh-HK / zh-MO / zh-Hant → 繁體中文、それ以外の zh → 简体中文
+function detectLang() {
+  const list = (navigator.languages && navigator.languages.length)
+             ? navigator.languages : [navigator.language || "en"];
+  for (const raw of list) {
+    const tag = String(raw).toLowerCase();
+    if (tag.startsWith("zh")) return /hant|-tw|-hk|-mo/.test(tag) ? "zhTW" : "zh";
+    const two = tag.slice(0,2);
+    if (I18N[two]) return two;
+  }
+  return "en";
+}
+const saved = savedLang();
+setLang(I18N[saved] ? saved : detectLang());
 
 // ====== 予約コード（URLの ?code= から）======
 const code = new URLSearchParams(location.search).get("code") || "";
