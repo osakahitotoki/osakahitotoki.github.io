@@ -33,6 +33,24 @@
   .privacy { color:#8a8172; font-size:11.5px; margin-top:16px; line-height:1.7; }
   .codebox { background:#f0e9da; border:1px dashed #c9a86a; border-radius:10px;
          padding:10px 12px; font-size:15px; letter-spacing:.06em; }
+  ::placeholder { color:#bcb2a0; }
+  /* 「全員同じ住所です」のチェック（押しやすいよう帯ごとタップできる） */
+  .chk { display:flex; align-items:center; gap:10px; margin:8px 0 10px; padding:11px 13px;
+         background:#f0e9da; border:1px solid #e0d6c0; border-radius:10px;
+         font-weight:600; font-size:14px; cursor:pointer; }
+  .chk input { width:20px; height:20px; flex:0 0 auto; margin:0; accent-color:var(--gold); cursor:pointer; }
+  .hint { color:#8a8172; font-size:12.5px; margin:6px 0 0; line-height:1.7; }
+  /* 人数ボタン（押した数だけカードが出る） */
+  .counts { display:flex; flex-wrap:wrap; gap:8px; margin:6px 0 4px; }
+  .counts button { flex:1 1 44px; min-width:44px; padding:13px 0; font-size:17px; font-weight:600;
+         border:1px solid #d5ccb8; background:#fff; color:var(--ink); border-radius:10px; cursor:pointer; }
+  .counts button.on { background:var(--gold); border-color:var(--gold); color:#171512; }
+  /* ゲスト1人ぶんのカード */
+  .guest { border:1px solid #e4dac4; border-radius:12px; padding:2px 14px 16px;
+         margin:14px 0; background:#fffdf7; }
+  .guest .gtitle { font-size:13px; font-weight:700; letter-spacing:.06em; color:#a08a56;
+         margin:14px 0 2px; }
+  .guest label { margin:12px 0 5px; }
 </style>
 </head>
 <body>
@@ -49,28 +67,13 @@
         <small data-i18n="q_code_s"></small></label>
       <div class="codebox" id="codeShow">-</div>
 
-      <label><span data-i18n="q_names"></span> <span class="req">*</span>
-        <small data-i18n="q_names_s"></small></label>
-      <textarea id="f_names" required></textarea>
+      <label><span data-i18n="q_count"></span> <span class="req">*</span></label>
+      <div class="counts" id="counts"></div>
 
-      <label><span data-i18n="q_natpass"></span> <span class="req">*</span>
-        <small data-i18n="q_natpass_s"></small></label>
-      <textarea id="f_natpass" required></textarea>
+      <div id="guests"></div>
 
-      <label><span data-i18n="q_addr"></span> <span class="req">*</span>
-        <small data-i18n="q_addr_s"></small></label>
-      <textarea id="f_addr" required></textarea>
-
-      <label><span data-i18n="q_job"></span>
-        <small data-i18n="q_job_s"></small></label>
-      <textarea id="f_job"></textarea>
-
-      <label><span data-i18n="q_contact"></span> <span class="req">*</span></label>
-      <input id="f_contact" required>
-
-      <label><span data-i18n="q_period"></span> <span class="req">*</span>
-        <small data-i18n="q_period_s"></small></label>
-      <input id="f_period" required>
+      <label><span data-i18n="q_period"></span> <span class="req">*</span></label>
+      <input id="f_period" required data-i18n-ph="ph_period">
 
       <button class="submit" type="submit" data-i18n="send"></button>
       <p class="privacy" data-i18n="privacy"></p>
@@ -98,7 +101,29 @@ const I18N = {
    q_code:"Booking code", q_code_s:"Filled automatically from your link.",
    q_names:"Full names of ALL guests (as in passport)", q_names_s:"One name per line.",
    q_natpass:"Nationality & passport number for each guest", q_natpass_s:"e.g. France / 12AB34567 — one guest per line.",
-   q_addr:"Home address of ALL guests", q_addr_s:"First write the main guest's home address. If everyone lives at the same address, just add \"same for all\". If someone lives at a different address, write their name next to it — e.g. Bailey / 1238 McCarroll St, Clarkston WA 99403.",
+   q_addr:"Home address of ALL guests", q_addr_s:"If everyone lives at the same address, just tick the box below.",
+   addr_same:"All guests live at the same address", addr_need_names:"Please fill in the guest names above first.",
+   ph_names:"Emma Dupont\nLucas Dupont", ph_addr:"e.g. 1-13 Matthews St, Grovedale VIC 3216, Australia",
+   ph_contact:"e.g. emma@example.com", ph_period:"e.g. 2026/7/14 - 2026/7/28",
+   q_count:"Number of guests",
+   guest_label:"Guest",
+   rep_mark:" (main guest)",
+   g_name:"Full name (as in passport)",
+   g_natpass:"Nationality & passport number",
+   g_natpass_s:"Passport number is needed only if you live outside Japan.",
+   g_addr:"Home address",
+   g_job:"Occupation (optional)",
+   addr_same_rep:"Same address as the main guest",
+   ph_name1:"Emma Dupont",
+   ph_natpass1:"e.g. France / 12AB34567",
+   ph_job:"e.g. office worker",
+   g_nat:"Nationality",
+   g_passport:"Passport number (optional)",
+   g_passport_s:"Only needed if you live outside Japan.",
+   nat_same_rep:"Same nationality as the main guest",
+   ph_nat:"e.g. France",
+   ph_passport:"e.g. 12AB34567",
+   contact_same_rep:"Same contact as the main guest",
    q_job:"Occupation of ALL guests（optional）", q_job_s:"Optional. One per line. e.g. office worker, student, self-employed, homemaker, retired.",
    q_contact:"Contact (email or phone)",
    q_period:"Period of stay in Japan", q_period_s:"e.g. 2026/7/14 - 2026/7/28",
@@ -109,7 +134,29 @@ const I18N = {
    q_code:"予約コード", q_code_s:"リンクから自動で入ります。",
    q_names:"宿泊者全員の氏名（パスポート表記）", q_names_s:"1行に1名ずつ。",
    q_natpass:"全員の国籍と旅券番号", q_natpass_s:"例：日本 / TR1234567 — 1行に1名ずつ。日本国内にお住まいの方は「日本」だけで結構です。",
-   q_addr:"宿泊者全員のご住所", q_addr_s:"まず代表者さまのご住所をご記入ください。ご同行の方も同じご住所なら、続けて「全員同じ」とお書きください。ご住所が違う方がいる場合は、その方のお名前を添えてご記入ください。例）Bailey / 1238 McCarroll St, Clarkston WA 99403",
+   q_addr:"宿泊者全員のご住所", q_addr_s:"全員が同じご住所の場合は、下のチェックを入れてください。",
+   addr_same:"全員同じご住所です", addr_need_names:"先に上の「氏名」の欄をご記入ください。",
+   ph_names:"山田 太郎\n山田 花子", ph_addr:"例）東京都杉並区清水2-21-3 〇〇マンション101",
+   ph_contact:"例）taro@example.com", ph_period:"例）2026/7/14 - 2026/7/28",
+   q_count:"ご宿泊人数",
+   guest_label:"ゲスト",
+   rep_mark:"（代表者さま）",
+   g_name:"氏名（パスポート表記）",
+   g_natpass:"国籍と旅券番号",
+   g_natpass_s:"日本国内にお住まいの方は「日本」だけで結構です。",
+   g_addr:"ご住所",
+   g_job:"ご職業（任意）",
+   addr_same_rep:"代表者さまと同じご住所",
+   ph_name1:"山田 太郎",
+   ph_natpass1:"例）日本 / TR1234567",
+   ph_job:"例）会社員",
+   g_nat:"国籍",
+   g_passport:"旅券番号（任意）",
+   g_passport_s:"日本国内にお住まいの方は不要です。",
+   nat_same_rep:"代表者さまと同じ国籍",
+   ph_nat:"例）日本",
+   ph_passport:"例）TR1234567",
+   contact_same_rep:"代表者さまと同じ連絡先",
    q_job:"宿泊者全員のご職業（任意）", q_job_s:"任意です。1行に1名ずつ。例：会社員・学生・自営業・主婦（主夫）・無職。",
    q_contact:"連絡先（メールまたは電話）",
    q_period:"日本での滞在期間", q_period_s:"例：2026/7/14 - 2026/7/28",
@@ -120,7 +167,29 @@ const I18N = {
    q_code:"预订编号", q_code_s:"从链接自动填写。",
    q_names:"全部住客的姓名（与护照一致）", q_names_s:"每行一人。",
    q_natpass:"每位住客的国籍和护照号码", q_natpass_s:"例：China / E12345678 — 每行一人。",
-   q_addr:"全部住客的住址", q_addr_s:"请先填写代表人的住址。若同行者住址相同，请加注「全员相同」。若有人住址不同，请在住址旁写上其姓名。例）Bailey / 1238 McCarroll St, Clarkston WA 99403",
+   q_addr:"全部住客的住址", q_addr_s:"如果全部住客住址相同，请勾选下方选项。",
+   addr_same:"全部住客住址相同", addr_need_names:"请先填写上方的姓名栏。",
+   ph_names:"张三\n李四", ph_addr:"例：北京市朝阳区建国路1号1单元101室",
+   ph_contact:"例：zhang@example.com", ph_period:"例：2026/7/14 - 2026/7/28",
+   q_count:"住客人数",
+   guest_label:"住客",
+   rep_mark:"（代表人）",
+   g_name:"姓名（与护照一致）",
+   g_natpass:"国籍和护照号码",
+   g_natpass_s:"居住在日本国内的客人只需填写国籍。",
+   g_addr:"住址",
+   g_job:"职业（选填）",
+   addr_same_rep:"与代表人住址相同",
+   ph_name1:"张三",
+   ph_natpass1:"例：China / E12345678",
+   ph_job:"例：公司职员",
+   g_nat:"国籍",
+   g_passport:"护照号码（选填）",
+   g_passport_s:"居住在日本国内的客人无需填写。",
+   nat_same_rep:"与代表人国籍相同",
+   ph_nat:"例：China",
+   ph_passport:"例：E12345678",
+   contact_same_rep:"与代表人联系方式相同",
    q_job:"全部住客的职业（选填）", q_job_s:"选填。每行一人。例：公司职员・学生・自营业・家庭主妇（主夫）・无职业。",
    q_contact:"联系方式（邮箱或电话）",
    q_period:"在日本的停留期间", q_period_s:"例：2026/7/14 - 2026/7/28",
@@ -131,7 +200,29 @@ const I18N = {
    q_code:"訂房編號", q_code_s:"已由連結自動帶入。",
    q_names:"全部住客的姓名（與護照相同）", q_names_s:"每行一位。",
    q_natpass:"每位住客的國籍與護照號碼", q_natpass_s:"例：Taiwan / 350343599 — 每行一位。",
-   q_addr:"全部住客的住址", q_addr_s:"請先填寫代表人的住址。若同行者住址相同，請加註「全部相同」。若有人住址不同，請在住址旁寫上其姓名。例）Bailey / 1238 McCarroll St, Clarkston WA 99403",
+   q_addr:"全部住客的住址", q_addr_s:"若全部住客住址相同，請勾選下方選項。",
+   addr_same:"全部住客住址相同", addr_need_names:"請先填寫上方的姓名欄。",
+   ph_names:"王小明\n陳小華", ph_addr:"例：台北市大安區信義路四段1號5樓",
+   ph_contact:"例：wang@example.com", ph_period:"例：2026/7/14 - 2026/7/28",
+   q_count:"住客人數",
+   guest_label:"住客",
+   rep_mark:"（代表人）",
+   g_name:"姓名（與護照相同）",
+   g_natpass:"國籍與護照號碼",
+   g_natpass_s:"居住於日本國內的客人只需填寫國籍。",
+   g_addr:"住址",
+   g_job:"職業（選填）",
+   addr_same_rep:"與代表人住址相同",
+   ph_name1:"王小明",
+   ph_natpass1:"例：Taiwan / 350343599",
+   ph_job:"例：上班族",
+   g_nat:"國籍",
+   g_passport:"護照號碼（選填）",
+   g_passport_s:"居住於日本國內的客人無需填寫。",
+   nat_same_rep:"與代表人國籍相同",
+   ph_nat:"例：Taiwan",
+   ph_passport:"例：350343599",
+   contact_same_rep:"與代表人聯絡方式相同",
    q_job:"全部住客的職業（選填）", q_job_s:"選填。每行一位。例：上班族・學生・自營業・家庭主婦（主夫）・無業。",
    q_contact:"聯絡方式（電子郵件或電話）",
    q_period:"在日本的停留期間", q_period_s:"例：2026/7/14 - 2026/7/28",
@@ -142,7 +233,29 @@ const I18N = {
    q_code:"예약 코드", q_code_s:"링크에서 자동 입력됩니다.",
    q_names:"전체 투숙객 성명 (여권 표기)", q_names_s:"한 줄에 한 명씩.",
    q_natpass:"전원의 국적과 여권번호", q_natpass_s:"예: Korea / M12345678 — 한 줄에 한 명씩.",
-   q_addr:"전체 투숙객의 주소", q_addr_s:"먼저 대표자의 주소를 적어 주세요. 동행자도 같은 주소라면 「전원 동일」이라고 덧붙여 주세요. 주소가 다른 분이 있으면 그분의 이름을 함께 적어 주세요. 예) Bailey / 1238 McCarroll St, Clarkston WA 99403",
+   q_addr:"전체 투숙객의 주소", q_addr_s:"전원이 같은 주소라면 아래 항목을 체크해 주세요.",
+   addr_same:"전원 같은 주소입니다", addr_need_names:"먼저 위의 성명란을 입력해 주세요.",
+   ph_names:"홍길동\n김철수", ph_addr:"예: 서울특별시 강남구 테헤란로 1길 10, 101호",
+   ph_contact:"예: hong@example.com", ph_period:"예: 2026/7/14 - 2026/7/28",
+   q_count:"숙박 인원",
+   guest_label:"게스트",
+   rep_mark:"(대표자)",
+   g_name:"성명 (여권 표기)",
+   g_natpass:"국적과 여권번호",
+   g_natpass_s:"일본 국내에 거주하시는 분은 국적만 기입하시면 됩니다.",
+   g_addr:"주소",
+   g_job:"직업 (선택)",
+   addr_same_rep:"대표자와 같은 주소",
+   ph_name1:"홍길동",
+   ph_natpass1:"예: Korea / M12345678",
+   ph_job:"예: 회사원",
+   g_nat:"국적",
+   g_passport:"여권번호 (선택)",
+   g_passport_s:"일본 국내에 거주하시는 분은 기입하지 않으셔도 됩니다.",
+   nat_same_rep:"대표자와 같은 국적",
+   ph_nat:"예: Korea",
+   ph_passport:"예: M12345678",
+   contact_same_rep:"대표자와 같은 연락처",
    q_job:"전체 투숙객의 직업（선택）", q_job_s:"선택 사항입니다. 한 줄에 한 명씩. 예: 회사원・학생・자영업・주부・무직.",
    q_contact:"연락처 (이메일 또는 전화)",
    q_period:"일본 체류 기간", q_period_s:"예: 2026/7/14 - 2026/7/28",
@@ -153,7 +266,29 @@ const I18N = {
    q_code:"Code de réservation", q_code_s:"Rempli automatiquement depuis votre lien.",
    q_names:"Noms complets de TOUS les voyageurs (comme sur le passeport)", q_names_s:"Un nom par ligne.",
    q_natpass:"Nationalité et numéro de passeport de chacun", q_natpass_s:"ex. France / 12AB34567 — une personne par ligne.",
-   q_addr:"Adresse du domicile de TOUS les voyageurs", q_addr_s:"Indiquez d'abord l'adresse du voyageur principal. Si tous ont la même adresse, ajoutez « identique pour tous ». Si une personne a une adresse différente, écrivez son nom à côté — ex. Bailey / 1238 McCarroll St, Clarkston WA 99403.",
+   q_addr:"Adresse du domicile de TOUS les voyageurs", q_addr_s:"Si tout le monde habite à la même adresse, cochez simplement la case ci-dessous.",
+   addr_same:"Tous les voyageurs habitent à la même adresse", addr_need_names:"Veuillez d'abord remplir les noms ci-dessus.",
+   ph_names:"Emma Dupont\nLucas Dupont", ph_addr:"ex. 12 rue de la Paix, 75002 Paris, France",
+   ph_contact:"ex. emma@example.com", ph_period:"ex. 2026/7/14 - 2026/7/28",
+   q_count:"Nombre de voyageurs",
+   guest_label:"Voyageur",
+   rep_mark:" (voyageur principal)",
+   g_name:"Nom complet (comme sur le passeport)",
+   g_natpass:"Nationalité et n° de passeport",
+   g_natpass_s:"Le n° de passeport n'est requis que si vous résidez hors du Japon.",
+   g_addr:"Adresse du domicile",
+   g_job:"Profession (facultatif)",
+   addr_same_rep:"Même adresse que le voyageur principal",
+   ph_name1:"Emma Dupont",
+   ph_natpass1:"ex. France / 12AB34567",
+   ph_job:"ex. employé(e)",
+   g_nat:"Nationalité",
+   g_passport:"N° de passeport (facultatif)",
+   g_passport_s:"Requis uniquement si vous résidez hors du Japon.",
+   nat_same_rep:"Même nationalité que le voyageur principal",
+   ph_nat:"ex. France",
+   ph_passport:"ex. 12AB34567",
+   contact_same_rep:"Même contact que le voyageur principal",
    q_job:"Profession de TOUS les voyageurs（facultatif）", q_job_s:"Facultatif. Une par ligne. ex. employé(e), étudiant(e), indépendant(e), au foyer, retraité(e).",
    q_contact:"Contact (e-mail ou téléphone)",
    q_period:"Période de séjour au Japon", q_period_s:"ex. 2026/7/14 - 2026/7/28",
@@ -164,7 +299,29 @@ const I18N = {
    q_code:"Buchungscode", q_code_s:"Wird automatisch aus Ihrem Link übernommen.",
    q_names:"Vollständige Namen ALLER Gäste (wie im Pass)", q_names_s:"Ein Name pro Zeile.",
    q_natpass:"Nationalität und Passnummer jedes Gastes", q_natpass_s:"z. B. Germany / C01X0006H — eine Person pro Zeile.",
-   q_addr:"Wohnanschrift ALLER Gäste", q_addr_s:"Bitte zuerst die Anschrift des Hauptgastes angeben. Wohnen alle unter derselben Anschrift, ergänzen Sie „für alle gleich“. Wohnt jemand woanders, schreiben Sie den Namen dazu — z. B. Bailey / 1238 McCarroll St, Clarkston WA 99403.",
+   q_addr:"Wohnanschrift ALLER Gäste", q_addr_s:"Wohnen alle unter derselben Anschrift, kreuzen Sie einfach unten an.",
+   addr_same:"Alle Gäste wohnen unter derselben Anschrift", addr_need_names:"Bitte füllen Sie zuerst die Namen oben aus.",
+   ph_names:"Anna Muster\nMax Muster", ph_addr:"z. B. Musterstraße 12, 10115 Berlin, Deutschland",
+   ph_contact:"z. B. anna@example.com", ph_period:"z. B. 2026/7/14 - 2026/7/28",
+   q_count:"Anzahl der Gäste",
+   guest_label:"Gast",
+   rep_mark:" (Hauptgast)",
+   g_name:"Vollständiger Name (wie im Pass)",
+   g_natpass:"Nationalität und Passnummer",
+   g_natpass_s:"Die Passnummer ist nur erforderlich, wenn Sie außerhalb Japans wohnen.",
+   g_addr:"Wohnanschrift",
+   g_job:"Beruf (optional)",
+   addr_same_rep:"Gleiche Anschrift wie der Hauptgast",
+   ph_name1:"Anna Muster",
+   ph_natpass1:"z. B. Germany / C01X0006H",
+   ph_job:"z. B. Angestellte(r)",
+   g_nat:"Nationalität",
+   g_passport:"Passnummer (optional)",
+   g_passport_s:"Nur erforderlich, wenn Sie außerhalb Japans wohnen.",
+   nat_same_rep:"Gleiche Nationalität wie der Hauptgast",
+   ph_nat:"z. B. Germany",
+   ph_passport:"z. B. C01X0006H",
+   contact_same_rep:"Gleicher Kontakt wie der Hauptgast",
    q_job:"Beruf ALLER Gäste（optional）", q_job_s:"Optional. Einer pro Zeile. z. B. Angestellte(r), Student(in), selbstständig, Hausfrau/Hausmann, Rentner(in).",
    q_contact:"Kontakt (E-Mail oder Telefon)",
    q_period:"Aufenthaltszeitraum in Japan", q_period_s:"z. B. 2026/7/14 - 2026/7/28",
@@ -175,7 +332,29 @@ const I18N = {
    q_code:"Código de reserva", q_code_s:"Se rellena automáticamente desde su enlace.",
    q_names:"Nombres completos de TODOS los huéspedes (como en el pasaporte)", q_names_s:"Un nombre por línea.",
    q_natpass:"Nacionalidad y número de pasaporte de cada uno", q_natpass_s:"ej. Spain / PAB123456 — una persona por línea.",
-   q_addr:"Domicilio de TODOS los huéspedes", q_addr_s:"Indique primero el domicilio del huésped principal. Si todos comparten la misma dirección, añada «igual para todos». Si alguien vive en otra dirección, escriba su nombre junto a ella — p. ej. Bailey / 1238 McCarroll St, Clarkston WA 99403.",
+   q_addr:"Domicilio de TODOS los huéspedes", q_addr_s:"Si todos viven en la misma dirección, solo marque la casilla de abajo.",
+   addr_same:"Todos los huéspedes viven en la misma dirección", addr_need_names:"Por favor, rellene primero los nombres de arriba.",
+   ph_names:"Ana García\nLuis García", ph_addr:"ej. Calle Mayor 12, 28013 Madrid, España",
+   ph_contact:"ej. ana@example.com", ph_period:"ej. 2026/7/14 - 2026/7/28",
+   q_count:"Número de huéspedes",
+   guest_label:"Huésped",
+   rep_mark:" (huésped principal)",
+   g_name:"Nombre completo (como en el pasaporte)",
+   g_natpass:"Nacionalidad y n.º de pasaporte",
+   g_natpass_s:"El n.º de pasaporte solo es necesario si reside fuera de Japón.",
+   g_addr:"Domicilio",
+   g_job:"Ocupación (opcional)",
+   addr_same_rep:"Misma dirección que el huésped principal",
+   ph_name1:"Ana García",
+   ph_natpass1:"ej. Spain / PAB123456",
+   ph_job:"ej. empleado/a",
+   g_nat:"Nacionalidad",
+   g_passport:"N.º de pasaporte (opcional)",
+   g_passport_s:"Solo es necesario si reside fuera de Japón.",
+   nat_same_rep:"Misma nacionalidad que el huésped principal",
+   ph_nat:"ej. Spain",
+   ph_passport:"ej. PAB123456",
+   contact_same_rep:"Mismo contacto que el huésped principal",
    q_job:"Ocupación de TODOS los huéspedes（opcional）", q_job_s:"Opcional. Una por línea. ej. empleado/a, estudiante, autónomo/a, ama/o de casa, jubilado/a.",
    q_contact:"Contacto (correo o teléfono)",
    q_period:"Período de estancia en Japón", q_period_s:"ej. 2026/7/14 - 2026/7/28",
@@ -197,6 +376,11 @@ function setLang(k) {
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const t = I18N[k][el.dataset.i18n]; if (t) el.textContent = t;
   });
+  // 入力欄の中の薄いお手本
+  document.querySelectorAll("[data-i18n-ph]").forEach(el => {
+    const t = I18N[k][el.dataset.i18nPh]; if (t) el.placeholder = t;
+  });
+  if (typeof renderGuests === "function") renderGuests();
   document.documentElement.lang = I18N[k].htmlLang || k;
   saveLang(k);
 }
@@ -216,7 +400,134 @@ function detectLang() {
   }
   return "en";
 }
+// ====== 人数ボタン → その人数ぶんのカードを出す ======
+const MAX_GUESTS = 8;   // 神崎川が最大7名。乳幼児が加わる場合があるので1つ余裕をみている
+const countsDiv = document.getElementById("counts");
+const guestsDiv = document.getElementById("guests");
+
+// 入力内容はここに持つ（カードを作り直しても消えないように）
+let guests = [{ name:"", nat:"", passport:"", sameNat:false, addr:"", contact:"", job:"", sameAsRep:false, sameContact:false }];
+
+function curLang() {
+  const b = document.querySelector(".langs button.on");
+  return (b && I18N[b.dataset.lang]) ? b.dataset.lang : "en";
+}
+function blankGuest() { return { name:"", nat:"", passport:"", sameNat:true, addr:"", contact:"", job:"", sameAsRep:true, sameContact:true }; }
+
+function setCount(n) {
+  n = Math.max(1, Math.min(MAX_GUESTS, n));
+  while (guests.length < n) guests.push(blankGuest());
+  guests.length = n;                       // 減らすときは後ろから外す（前の入力は残る）
+  guests[0].sameAsRep = false;             // 代表者さまは必ずご自身の住所・国籍
+  guests[0].sameNat = false;
+  guests[0].sameContact = false;
+  renderCounts(); renderGuests();
+}
+function renderCounts() {
+  countsDiv.innerHTML = "";
+  for (let i = 1; i <= MAX_GUESTS; i++) {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = i;
+    if (i === guests.length) b.className = "on";
+    b.onclick = () => setCount(i);
+    countsDiv.appendChild(b);
+  }
+}
+
+// 1人ぶんの入力欄を作る小道具
+function field(labelText, hintText, value, onInput, opts) {
+  opts = opts || {};
+  const lab = document.createElement("label");
+  lab.textContent = labelText;
+  if (opts.required) { const r = document.createElement("span"); r.className = "req"; r.textContent = " *"; lab.appendChild(r); }
+  if (hintText) { const sm = document.createElement("small"); sm.textContent = hintText; lab.appendChild(sm); }
+  const inp = document.createElement("input");
+  inp.value = value || "";
+  inp.placeholder = opts.ph || "";
+  if (opts.required) inp.required = true;
+  if (opts.autocomplete) inp.autocomplete = opts.autocomplete;
+  inp.addEventListener("input", () => onInput(inp.value));
+  const wrap = document.createDocumentFragment();
+  wrap.appendChild(lab); wrap.appendChild(inp);
+  return wrap;
+}
+
+function renderGuests() {
+  const T = I18N[curLang()];
+  guestsDiv.innerHTML = "";
+  guests.forEach((g, i) => {
+    const card = document.createElement("div"); card.className = "guest";
+    const ttl = document.createElement("div"); ttl.className = "gtitle";
+    ttl.textContent = T.guest_label + " " + (i + 1) + (i === 0 ? T.rep_mark : "");
+    card.appendChild(ttl);
+
+    // 「代表者さまと同じ」チェックを作る小道具
+    const sameBox = (labelText, on, onChange) => {
+      const chk = document.createElement("label"); chk.className = "chk";
+      const cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = on;
+      const sp = document.createElement("span"); sp.textContent = labelText;
+      cb.addEventListener("change", () => { onChange(cb.checked); renderGuests(); });
+      chk.appendChild(cb); chk.appendChild(sp); return chk;
+    };
+
+    card.appendChild(field(T.g_name, null, g.name, v => g.name = v,
+      { required:true, ph:T.ph_name1 }));
+
+    // 国籍：2人目以降は代表者から引き継げる（ご家族はたいてい同じ）
+    if (i > 0) card.appendChild(sameBox(T.nat_same_rep, g.sameNat, v => g.sameNat = v));
+    if (i === 0 || !g.sameNat) {
+      card.appendChild(field(T.g_nat, null, g.nat, v => g.nat = v,
+        { required:true, ph:T.ph_nat }));
+    }
+    // 旅券番号は「日本国内に住所のない外国籍の方」だけ必要なので任意にしている
+    card.appendChild(field(T.g_passport, T.g_passport_s, g.passport, v => g.passport = v,
+      { ph:T.ph_passport }));
+
+    if (i > 0) card.appendChild(sameBox(T.addr_same_rep, g.sameAsRep, v => g.sameAsRep = v));
+    if (i === 0 || !g.sameAsRep) {
+      card.appendChild(field(T.g_addr, null, g.addr, v => g.addr = v,
+        { required:true, ph:T.ph_addr, autocomplete:"street-address" }));
+    }
+    // 連絡先も法令上ぜんいん必須（旅館業法施行規則4条の2第3項／特区民泊 規則10条の2第3項）
+    if (i > 0) card.appendChild(sameBox(T.contact_same_rep, g.sameContact, v => g.sameContact = v));
+    if (i === 0 || !g.sameContact) {
+      card.appendChild(field(T.q_contact, null, g.contact, v => g.contact = v,
+        { required:true, ph:T.ph_contact, autocomplete:"email" }));
+    }
+    card.appendChild(field(T.g_job, null, g.job, v => g.job = v, { ph:T.ph_job }));
+    guestsDiv.appendChild(card);
+  });
+}
+
+// ====== 名簿へ送る文字列を組み立てる（これまでの書き方をそのまま守る）======
+function namesValue()   { return guests.map(g => g.name.trim()).join("\n"); }
+function natpassValue() {
+  return guests.map(g => {
+    const nat = (g.sameNat ? guests[0].nat : g.nat).trim();
+    const pp  = g.passport.trim();
+    return pp ? (nat + " / " + pp) : nat;
+  }).join("\n");
+}
+function jobValue()     { return guests.map(g => g.job.trim()).filter(Boolean).join("\n"); }
+function contactValue() {
+  if (guests.length === 1) return guests[0].contact.trim();
+  const allSame = guests.slice(1).every(g => g.sameContact);
+  if (allSame) return guests[0].contact.trim() + "\nsame for all";
+  return guests.map(g =>
+    g.name.trim() + " / " + (g.sameContact ? guests[0].contact.trim() : g.contact.trim())
+  ).join("\n");
+}
+function addressValue() {
+  if (guests.length === 1) return guests[0].addr.trim();
+  const allSame = guests.slice(1).every(g => g.sameAsRep);
+  if (allSame) return guests[0].addr.trim() + "\nsame for all";
+  return guests.map(g =>
+    g.name.trim() + " / " + (g.sameAsRep ? guests[0].addr.trim() : g.addr.trim())
+  ).join("\n");
+}
+
 const saved = savedLang();
+setCount(1);
 setLang(I18N[saved] ? saved : detectLang());
 
 // ====== 予約コード（URLの ?code= から）======
@@ -230,11 +541,11 @@ document.getElementById("ci").addEventListener("submit", async (e) => {
   btn.disabled = true;
   const fd = new FormData();
   fd.append(ENTRY.code, code || "(no code)");
-  fd.append(ENTRY.names, document.getElementById("f_names").value);
-  fd.append(ENTRY.natpass, document.getElementById("f_natpass").value);
-  fd.append(ENTRY.address, document.getElementById("f_addr").value);
-  fd.append(ENTRY.job, document.getElementById("f_job").value);
-  fd.append(ENTRY.contact, document.getElementById("f_contact").value);
+  fd.append(ENTRY.names, namesValue());
+  fd.append(ENTRY.natpass, natpassValue());
+  fd.append(ENTRY.address, addressValue());
+  fd.append(ENTRY.job, jobValue());
+  fd.append(ENTRY.contact, contactValue());
   fd.append(ENTRY.period, document.getElementById("f_period").value);
   try { await fetch(FORM_URL, { method:"POST", mode:"no-cors", body:fd }); } catch(_) {}
   document.getElementById("formCard").style.display = "none";
