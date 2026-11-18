@@ -38,6 +38,13 @@
   .chk { display:flex; align-items:center; gap:10px; margin:8px 0 10px; padding:11px 13px;
          background:#f0e9da; border:1px solid #e0d6c0; border-radius:10px;
          font-weight:600; font-size:14px; cursor:pointer; }
+  .kz { margin:22px 0 4px; padding:14px 14px 6px; border:2px solid var(--gold); border-radius:14px; background:#fffdf7; }
+  .kz .kzh { font-weight:700; font-size:15px; }
+  .kz .kzh small { display:block; font-weight:400; color:#6f675a; font-size:12.5px; margin-top:3px; }
+  .opts { display:flex; flex-direction:column; gap:7px; margin:6px 0 12px; }
+  .opts label.chk { margin:0; font-weight:500; }
+  .opts label.chk.off { opacity:.4; }
+  .kznote { margin:-4px 0 10px; font-size:13px; color:#9a5b2e; font-weight:600; }
   .chk input { width:20px; height:20px; flex:0 0 auto; margin:0; accent-color:var(--gold); cursor:pointer; }
   .hint { color:#8a8172; font-size:12.5px; margin:6px 0 0; line-height:1.7; }
   /* 人数ボタン（押した数だけカードが出る） */
@@ -76,6 +83,22 @@
       <label><span data-i18n="q_period"></span> <span class="req">*</span></label>
       <input id="f_period" required data-i18n-ph="ph_period">
 
+      <div class="kz">
+        <div class="kzh"><span data-i18n="kz_head"></span><small data-i18n="kz_head_s"></small></div>
+        <label><span data-i18n="q_futon"></span></label>
+        <div class="opts">
+          <label class="chk"><input type="radio" name="futon" value="1"><span data-i18n="futon1"></span></label>
+          <label class="chk"><input type="radio" name="futon" value="2"><span data-i18n="futon2"></span></label>
+          <label class="chk"><input type="radio" name="futon" value="3"><span data-i18n="futon3"></span></label>
+        </div>
+        <p class="kznote" id="kzNote" data-i18n="futon_max2" hidden></p>
+        <label><span data-i18n="q_baby"></span></label>
+        <div class="opts">
+          <label class="chk"><input type="radio" name="baby" value="yes"><span data-i18n="yes"></span></label>
+          <label class="chk"><input type="radio" name="baby" value="no"><span data-i18n="no"></span></label>
+        </div>
+      </div>
+
       <button class="submit" type="submit" data-i18n="send"></button>
       <p class="privacy" data-i18n="privacy"></p>
     </form>
@@ -93,7 +116,11 @@
 const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdiCJrhAlOSfemdd0mw8bHN9r4D_1rlLYigbLvroM2plAdryA/formResponse";
 const ENTRY = { code:"entry.1291716912", names:"entry.597151491",
                 natpass:"entry.1043140757", contact:"entry.969291366", period:"entry.1828523476",
-                address:"entry.851956946", job:"entry.776376456" };
+                address:"entry.851956946", job:"entry.776376456",
+                futon:"entry.1422477849", baby:"entry.1980590397" };
+// 3階和室の布団の数 → Googleフォームの選択肢と1字もちがわないこと（2026-11-18）
+const FUTON_OPT = { "1":"1 futon（布団1組）", "2":"2 futons（布団2組）", "3":"3 futons（布団3組）" };
+const BABY_OPT = { yes:"Yes（はい）", no:"No（いいえ）" };
 
 // ====== 多言語辞書 ======
 const I18N = {
@@ -372,6 +399,19 @@ const I18N = {
 };
 
 // ====== 言語切り替え ======
+
+// ====== 神崎川だけの質問（2026-11-18 追加）======
+const KZ = {
+ en:{futon_max2:"With the baby playpen, up to 2 futons fit in the room.", kz_head:"For guests staying at Kanzakigawa (On-okuri) only", kz_head_s:"So we can prepare the room before you arrive. Optional.", q_futon:"3rd-floor Japanese room: how many futons should we lay out?", futon0:"None — keep it as a sitting room with a table", futon1:"1 futon", futon2:"2 futons", futon3:"3 futons", q_baby:"Do you need a baby playpen? (free)", yes:"Yes", no:"No"},
+ zh:{futon_max2:"放置婴儿围栏时，房间最多可铺2套被褥。", kz_head:"仅限入住神崎川（恩送り）的客人", kz_head_s:"方便我们在您到达前准备房间。选填。", q_futon:"3楼和室：需要铺几套被褥？", futon0:"不需要 — 保留桌子作为起居室", futon1:"1套", futon2:"2套", futon3:"3套", q_baby:"需要婴儿围栏吗？（免费）", yes:"需要", no:"不需要"},
+ zhTW:{futon_max2:"放置嬰兒圍欄時，房間最多可鋪2套被褥。", kz_head:"僅限入住神崎川（恩送り）的旅客", kz_head_s:"方便我們在您抵達前準備房間。選填。", q_futon:"3樓和室：需要鋪幾套被褥？", futon0:"不需要 — 保留桌子作為起居室", futon1:"1套", futon2:"2套", futon3:"3套", q_baby:"需要嬰兒圍欄嗎？（免費）", yes:"需要", no:"不需要"},
+ ja:{futon_max2:"ベビーサークルを置く場合、お布団は最大2組までです。", kz_head:"神崎川（恩送り）にお泊まりの方のみ", kz_head_s:"ご到着前にお部屋を整えるためにお聞きしています。任意です。", q_futon:"3階の和室：お布団は何組敷きますか？", futon0:"敷かない（テーブルを置いた、くつろぐお部屋のまま）", futon1:"1組", futon2:"2組", futon3:"3組", q_baby:"ベビーサークルは必要ですか？（無料）", yes:"はい", no:"いいえ"},
+ ko:{futon_max2:"베이비 서클을 두는 경우 이불은 최대 2채까지입니다.", kz_head:"간자키가와(恩送り) 숙박 손님만", kz_head_s:"도착 전에 방을 준비하기 위해 여쭙습니다. 선택 사항입니다.", q_futon:"3층 다다미방: 이불을 몇 채 깔아 드릴까요?", futon0:"깔지 않음 — 테이블이 있는 거실로 사용", futon1:"1채", futon2:"2채", futon3:"3채", q_baby:"아기 울타리(베이비 서클)가 필요하신가요? (무료)", yes:"네", no:"아니요"},
+ fr:{futon_max2:"Avec le parc pour bébé, la chambre peut accueillir 2 futons au maximum.", kz_head:"Uniquement pour les voyageurs logeant à Kanzakigawa (On-okuri)", kz_head_s:"Pour préparer la chambre avant votre arrivée. Facultatif.", q_futon:"Chambre japonaise du 3e étage : combien de futons devons-nous installer ?", futon0:"Aucun — garder un salon avec une table", futon1:"1 futon", futon2:"2 futons", futon3:"3 futons", q_baby:"Avez-vous besoin d'un parc pour bébé ? (gratuit)", yes:"Oui", no:"Non"},
+ de:{futon_max2:"Mit dem Laufgitter passen höchstens 2 Futons in das Zimmer.", kz_head:"Nur für Gäste in Kanzakigawa (On-okuri)", kz_head_s:"Damit wir das Zimmer vor Ihrer Ankunft vorbereiten können. Freiwillig.", q_futon:"Japanisches Zimmer im 3. Stock: Wie viele Futons sollen wir auslegen?", futon0:"Keine — als Wohnzimmer mit Tisch lassen", futon1:"1 Futon", futon2:"2 Futons", futon3:"3 Futons", q_baby:"Brauchen Sie ein Laufgitter für Ihr Baby? (kostenlos)", yes:"Ja", no:"Nein"},
+ es:{futon_max2:"Con el corralito, caben como máximo 2 futones en la habitación.", kz_head:"Solo para huéspedes de Kanzakigawa (On-okuri)", kz_head_s:"Para preparar la habitación antes de su llegada. Opcional.", q_futon:"Habitación japonesa del 3.er piso: ¿cuántos futones preparamos?", futon0:"Ninguno — dejarla como sala de estar con mesa", futon1:"1 futón", futon2:"2 futones", futon3:"3 futones", q_baby:"¿Necesita un corralito para bebé? (gratis)", yes:"Sí", no:"No"}
+};
+Object.keys(KZ).forEach(k => { if (I18N[k]) Object.assign(I18N[k], KZ[k]); });
 const order = ["en","zh","zhTW","ja","ko","fr","de","es"];
 const langsDiv = document.getElementById("langs");
 order.forEach(k => {
@@ -535,6 +575,18 @@ function addressValue() {
   ).join("\n");
 }
 
+
+// ベビーサークルを置くと和室に布団は最大2組（Nino 2026-11-18）
+function syncFutonLimit() {
+  const baby = document.querySelector('input[name="baby"]:checked');
+  const limit = baby && baby.value === "yes";
+  const three = document.querySelector('input[name="futon"][value="3"]');
+  three.disabled = limit;
+  three.closest("label").classList.toggle("off", limit);
+  if (limit && three.checked) { three.checked = false; document.querySelector('input[name="futon"][value="2"]').checked = true; }
+  document.getElementById("kzNote").hidden = !limit;
+}
+document.querySelectorAll('input[name="baby"]').forEach(r => r.addEventListener("change", syncFutonLimit));
 const saved = savedLang();
 setCount(1);
 setLang(I18N[saved] ? saved : detectLang());
@@ -556,6 +608,10 @@ document.getElementById("ci").addEventListener("submit", async (e) => {
   fd.append(ENTRY.job, jobValue());
   fd.append(ENTRY.contact, contactValue());
   fd.append(ENTRY.period, document.getElementById("f_period").value);
+  const fu = document.querySelector('input[name="futon"]:checked');
+  if (fu) fd.append(ENTRY.futon, FUTON_OPT[fu.value]);
+  const bb = document.querySelector('input[name="baby"]:checked');
+  if (bb) fd.append(ENTRY.baby, BABY_OPT[bb.value]);
   try { await fetch(FORM_URL, { method:"POST", mode:"no-cors", body:fd }); } catch(_) {}
   document.getElementById("formCard").style.display = "none";
   document.getElementById("doneCard").style.display = "block";
