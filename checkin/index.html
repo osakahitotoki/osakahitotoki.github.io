@@ -83,7 +83,7 @@
       <label><span data-i18n="q_period"></span> <span class="req">*</span></label>
       <input id="f_period" required data-i18n-ph="ph_period">
 
-      <div class="kz">
+      <div class="kz" id="kzBox" hidden>
         <div class="kzh"><span data-i18n="kz_head"></span><small data-i18n="kz_head_s"></small></div>
         <label><span data-i18n="q_futon"></span></label>
         <div class="opts">
@@ -587,6 +587,10 @@ function syncFutonLimit() {
   document.getElementById("kzNote").hidden = !limit;
 }
 document.querySelectorAll('input[name="baby"]').forEach(r => r.addEventListener("change", syncFutonLimit));
+// 布団・ベビーサークルの質問は神崎川のリンク（?house=kanzakigawa）のときだけ出す（Nino 2026-11-18）
+if (new URLSearchParams(location.search).get("house") === "kanzakigawa") {
+  document.getElementById("kzBox").hidden = false;
+}
 const saved = savedLang();
 setCount(1);
 setLang(I18N[saved] ? saved : detectLang());
